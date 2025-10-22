@@ -1,6 +1,6 @@
 from alembic import context
 
-from carinsurance.db.base import Base
+from carinsurance_api.db import Base
 
 from logging.config import fileConfig
 

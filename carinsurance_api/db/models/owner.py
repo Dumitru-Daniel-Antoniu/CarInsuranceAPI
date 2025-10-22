@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from carinsurance.db.base import Base, PKInt
-from carinsurance.db.models.car import Car
+from carinsurance_api.db.base import Base, PKInt
+from carinsurance_api.db.models.car import Car
 
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship

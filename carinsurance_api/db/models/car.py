@@ -1,7 +1,7 @@
-from carinsurance.db.base import Base, PKInt
-from carinsurance.db.models.claim import Claim
-from carinsurance.db.models.owner import Owner
-from carinsurance.db.models.policy import Policy
+from carinsurance_api.db.base import Base, PKInt
+from carinsurance_api.db.models.claim import Claim
+from carinsurance_api.db.models.owner import Owner
+from carinsurance_api.db.models.policy import Policy
 
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
