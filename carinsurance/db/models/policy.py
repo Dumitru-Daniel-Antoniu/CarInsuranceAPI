@@ -1,0 +1,21 @@
+from carinsurance.db.base import Base, PKInt
+from carinsurance.db.models.car import Car
+
+from datetime import date, datetime
+
+from sqlalchemy import Date, DateTime, ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from typing import Optional
+
+
+class Policy(Base):
+    __tablename__ = "policies"
+
+    id: Mapped[int] = PKInt
+    provider: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    start_date: Mapped[date] = mapped_column(Date, nullable=False)
+    end_date: Mapped[date] = mapped_column(Date, nullable=False)
+    logged_expiry_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    car_id: Mapped[int] = mapped_column(ForeignKey("cars.id"), nullable=False)
+    car: Mapped[Car] = relationship(back_populates="policies")
