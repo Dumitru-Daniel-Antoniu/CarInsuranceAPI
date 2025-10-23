@@ -17,11 +17,11 @@ Including another URLconf
 from carinsurance_api.api.routers.health import HealthView
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('health/', include(HealthView.as_view())),
-    path('api/cars/', include('carinsurance_api.api.urls'))
+    path('health/', HealthView.as_view()),
+    # path('api/cars/', include('carinsurance_api.api.urls'))
 ]
