@@ -42,7 +42,7 @@ class PolicySchema(BaseModel):
             raise ValueError("Date must be between 1900 and 2100.")
         return v
 
-    @field_validator("end_date"):
+    @field_validator("end_date")
     def end_after_start(cls, v, info):
         start = info.data.get("start_date")
         if start and v < start:
