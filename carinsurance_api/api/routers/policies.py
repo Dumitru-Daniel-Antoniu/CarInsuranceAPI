@@ -5,12 +5,12 @@ from carinsurance_api.db.models.policy import Policy
 from carinsurance_api.db.session import SessionLocal
 from carinsurance_api.services.policy_service import create_policy
 
+from datatime import datetime
+
 from pydantic import ValidationError
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from sqlalchemy.exc import IntegrityError
 
 
 class PolicyView(APIView):
