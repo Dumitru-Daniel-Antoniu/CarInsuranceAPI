@@ -15,13 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from carinsurance_api.api.routers.health import HealthView
+from carinsurance_api.api.routers.owners import OwnerView
 
 from django.contrib import admin
 from django.urls import include, path
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('health/', HealthView.as_view()),
-    # path('api/cars/', include('carinsurance_api.api.urls'))
+    path("admin/", admin.site.urls),
+    path("health/", HealthView.as_view()),
+    path("owner/{owner_id}/", OwnerView.as_view()),
+    path('api/cars/', include('carinsurance_api.api.urls'))
 ]
