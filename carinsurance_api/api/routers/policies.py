@@ -5,7 +5,7 @@ from carinsurance_api.db.models.policy import Policy
 from carinsurance_api.db.session import SessionLocal
 from carinsurance_api.services.policy_service import create_policy
 
-from datatime import datetime
+from datetime import datetime
 
 from pydantic import ValidationError
 
