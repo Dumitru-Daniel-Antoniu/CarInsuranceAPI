@@ -1,8 +1,8 @@
 from datetime import date, datetime
-
-from pydantic import BaseModel, Field, field_validator, StrictFloat, StrictInt, StrictStr
-
 from typing import Optional
+
+from pydantic import (BaseModel, Field, StrictFloat, StrictInt, StrictStr,
+                      field_validator)
 
 
 class OwnerSchema(BaseModel):
@@ -37,7 +37,7 @@ class PolicySchema(BaseModel):
     car_id: StrictInt = Field(alias="carId")
 
     @field_validator("start_date", "end_date")
-    def date_range_guard(self, v):
+    def date_range_guard(cls, v):
         if not (1900 <= v.year <= 2100):
             raise ValueError("Date must be between 1900 and 2100.")
         return v

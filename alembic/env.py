@@ -1,15 +1,11 @@
 import os
-
-from alembic import context
-
-from carinsurance_api.db import Base
-
-from dotenv import load_dotenv
-
 from logging.config import fileConfig
 
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 
+from alembic import context
+from carinsurance_api.db.base import Base
 
 load_dotenv()
 

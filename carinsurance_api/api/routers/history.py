@@ -1,10 +1,10 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from carinsurance_api.api.errors import error_response
 from carinsurance_api.db.models.car import Car
 from carinsurance_api.db.session import SessionLocal
 from carinsurance_api.services.history_service import get_car_history
-
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class HistoryView(APIView):

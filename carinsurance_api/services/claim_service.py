@@ -1,7 +1,7 @@
+from sqlalchemy.orm import Session
+
 from carinsurance_api.api.schemas import ClaimSchema
 from carinsurance_api.db.models.claim import Claim
-
-from sqlalchemy.orm import Session
 
 
 def create_claim(db: Session, claim_data: ClaimSchema) -> tuple[Claim, str]:

@@ -1,7 +1,7 @@
+from sqlalchemy.orm import Session
+
 from carinsurance_api.db.models.claim import Claim
 from carinsurance_api.db.models.policy import Policy
-
-from sqlalchemy.orm import Session
 
 
 def get_car_history(db: Session, car_id: int) -> list[dict]:

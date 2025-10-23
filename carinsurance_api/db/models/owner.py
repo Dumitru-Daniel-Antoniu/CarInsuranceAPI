@@ -1,21 +1,24 @@
 from __future__ import annotations
 
-from carinsurance_api.db.base import Base, PKInt
-from carinsurance_api.db.models.car import Car
+from typing import List, Optional
 
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from typing import List, Optional
+from carinsurance_api.db.base import Base, PKInt
+
+# from carinsurance_api.db.models.car import Car
+
+
 
 
 class Owner(Base):
     __tablename__ = "owners"
 
-    id: Mapped[int] = PKInt
+    id: Mapped[PKInt]
     name: Mapped[str] = mapped_column(String(70), nullable=False)
     email: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, unique=True)
-    cars: Mapped[List[Car]] = relationship(
-        back_populates="owner",
-        cascade="all, delete-orphan"
-    )
+    # cars: Mapped[List["Car"]] = relationship(
+    #     back_populates="owner",
+    #     cascade="all, delete-orphan"
+    # )

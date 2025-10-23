@@ -1,16 +1,15 @@
+from datetime import datetime
+
+from pydantic import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from carinsurance_api.api.errors import error_response
 from carinsurance_api.api.schemas import PolicySchema
 from carinsurance_api.db.models.car import Car
 from carinsurance_api.db.models.policy import Policy
 from carinsurance_api.db.session import SessionLocal
 from carinsurance_api.services.policy_service import create_policy
-
-from datetime import datetime
-
-from pydantic import ValidationError
-
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class PolicyView(APIView):

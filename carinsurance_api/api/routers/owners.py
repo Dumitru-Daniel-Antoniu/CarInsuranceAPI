@@ -1,12 +1,11 @@
+from pydantic import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from carinsurance_api.api.errors import error_response
 from carinsurance_api.api.schemas import OwnerSchema
 from carinsurance_api.db.models.owner import Owner
 from carinsurance_api.db.session import SessionLocal
-
-from pydantic import ValidationError
-
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class OwnerView(APIView):

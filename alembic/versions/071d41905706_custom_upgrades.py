@@ -5,15 +5,13 @@ Revises: d59bb5449cfa
 Create Date: 2025-10-22 17:41:22.225028
 
 """
+from typing import Sequence, Union
+
 import sqlalchemy as sa
-
-from alembic import op
-
 from sqlalchemy import Date, func
 from sqlalchemy.sql import column, table
 
-from typing import Sequence, Union
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = '071d41905706'

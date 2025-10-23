@@ -1,11 +1,10 @@
-from carinsurance_api.api.schemas import PolicySchema
-from carinsurance_api.db.models.policy import Policy
-
 from datetime import date
+from typing import List
 
 from sqlalchemy.orm import Session
 
-from typing import List
+from carinsurance_api.api.schemas import PolicySchema
+from carinsurance_api.db.models.policy import Policy
 
 
 def create_policy(db: Session, policy_data: PolicySchema) -> Policy:
