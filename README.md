@@ -134,7 +134,7 @@ All errors follow a consistent JSON format:
 ```json
 {
     "error": {
-        "code": <status_code>,
+        "code": "<status_code>",
         "message": "<error_message>",
         "details": "<optional_details>"
     }
