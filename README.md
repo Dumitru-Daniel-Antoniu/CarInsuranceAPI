@@ -2,27 +2,26 @@
 
 ## Overview
 
-Car Insurance API is a backend service for managing car insurance policies, claims, and related entities. It provides RESTful endpoints for creating, retrieving, and validating car insurance policies, submitting claims, and accessing historical data. The system includes scheduled tasks for marking expired policies and supports OpenAPI auto-generated documentation.
+Car Insurance API is a backend service for managing car insurance policies and claims. It provides RESTful endpoints for creating, retrieving, and validating car insurance policies, submitting claims, and accessing historical data. The system includes scheduled tasks for marking expired policies.
 
 ## Technologies Used
 
 - **Python**
-- **FastAPI** or **Django REST Framework**
+- **Django REST Framework**
 - **SQLAlchemy**
 - **APScheduler**
-- **drf-spectacular** (for OpenAPI documentation)
-- **SQLite** (for development)
-- **Logging**
+- **SQLite** 
 
 ## API Endpoints
 
 ### Car Endpoints
 
-#### POST /cars
+#### POST /api/cars
 Create a new car.  
 **Responses:**
 - `201 Created` – Car created successfully.
 - `409 Conflict` – VIN must be unique.
+- `422 Unprocessable Content` – mandatory fields must contain correct data type.
 
 **Error Example:**
 ```json
@@ -35,7 +34,7 @@ Create a new car.
 }
 ```
 
-#### GET /cars/{car_id}
+#### GET /api/cars/{car_id}
 Retrieve car details.  
 **Responses:**
 - `200 OK` – Car found.
@@ -56,7 +55,7 @@ Retrieve car details.
 
 ### Policy Endpoints
 
-#### POST /policies
+#### POST /api/cars/{car_id}/policies
 Create a new policy.  
 **Responses:**
 - `201 Created` – Policy created successfully.
@@ -73,28 +72,28 @@ Create a new policy.
 }
 ```
 
-#### GET /policies/{policy_id}
+#### GET api/cars/{car_id}/policies/{policy_id}
 Retrieve policy details.  
 **Responses:**
 - `200 OK` – Policy found.
-- `404 Not Found` – Policy does not exist.
+- `404 Not Found` – Policy or car does not exist.
 
 ---
 
 ### Validity Endpoint
 
-#### GET /validity?car_id={id}&date={date}
+#### GET /api/cars/{car_id}/insurance-valid/?date={date}
 Check if a car has a valid policy on a given date.  
 **Responses:**
 - `200 OK` – Returns `{ "valid": true/false }`.
-- `404 Not Found` – Car does not exist.
 - `400 Bad Request` – Invalid date format.
+- `404 Not Found` – Car does not exist.
 
 ---
 
 ### Claims Endpoints
 
-#### POST /claims
+#### POST /api/cars/{car_id}/claims
 Submit a claim.  
 **Responses:**
 - `201 Created` – Claim created successfully (with `Location` header).
@@ -105,7 +104,7 @@ Submit a claim.
 
 ### History Endpoint
 
-#### GET /history?car_id={id}
+#### GET /api/cars/{car_id}/history
 Retrieve historical events for a car, ordered by date.  
 **Responses:**
 - `200 OK` – Returns list of historical events.
@@ -115,7 +114,7 @@ Retrieve historical events for a car, ordered by date.
 
 ## Scheduled Tasks
 
-The API includes scheduled background tasks for automatically marking expired policies and logging related events. This is managed using **APScheduler** and runs periodically to ensure policy statuses remain accurate.
+The API includes scheduled background tasks for automatically marking expired policies. This is managed using **APScheduler** and runs periodically to ensure policy statuses remain accurate.
 
 ---
 
@@ -184,7 +183,7 @@ All errors follow a consistent JSON format:
 To start the development server, run:
 
 ```bash
-python carinsurance_api/main.py
+python manage.py runserver
 ```
 
 By default, the API will start locally on `http://127.0.0.1:8000`.
