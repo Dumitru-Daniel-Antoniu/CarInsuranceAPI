@@ -10,8 +10,6 @@ from carinsurance_api.db.base import Base, PKInt
 # from carinsurance_api.db.models.car import Car
 
 
-
-
 class Claim(Base):
     __tablename__ = "claims"
 

@@ -27,11 +27,6 @@ def upgrade():
         column('start_date', Date),
         column('end_date', Date)
     )
-    op.execute(
-        policy_table.update()
-        .where(policy_table.c.end_date == None)
-        .values(end_date=func.date(policy_table.c.start_date, '+1 year'))
-    )
 
     with op.batch_alter_table('policies') as batch_op:
         batch_op.alter_column('end_date', nullable=False)

@@ -6,6 +6,7 @@ from datetime import datetime, time, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from carinsurance_api.core.config import Settings
+from carinsurance_api.core.core_logger import logger
 from carinsurance_api.db.models.car import Car
 from carinsurance_api.db.models.claim import Claim
 from carinsurance_api.db.models.policy import Policy
@@ -35,6 +36,15 @@ def log_policy_expiry():
             car = db.get(Car, policy.car_id)
             print(f"Policy expired: {policy.id}, End Date: {policy.end_date}, Policy provider: {policy.provider},"
                   f" Car ID: {policy.car_id}, Car vin: {car.vin}")
+
+            logger.info(
+                "Policy expired",
+                policy_id=policy.id,
+                car_id=policy.car_id,
+                provider=policy.provider,
+                end_date=str(policy.end_date),
+                car_vin=car.vin
+            )
 
             policy.logged_expiry_at = now
             db.commit()

@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 
 from carinsurance_api.api.errors import error_response
 from carinsurance_api.api.schemas import ClaimSchema
+from carinsurance_api.core.core_logger import logger
 from carinsurance_api.db.models.car import Car
 from carinsurance_api.db.models.claim import Claim
 from carinsurance_api.db.session import SessionLocal
@@ -62,6 +63,15 @@ class ClaimView(APIView):
             claim, location = create_claim(db, claim_data)
             response_data = ClaimSchema.model_validate(claim).model_dump(by_alias=True)
 
+            logger.info(
+                "Claim created",
+                claim_id=claim.id,
+                car_id=claim.car_id,
+                claim_amount=claim.amount,
+                claim_description=claim.description,
+                claim_date=str(claim.claim_date)
+            )
+
             return Response(response_data, status=201, headers={"Location": location})
 
         finally:
@@ -83,6 +93,15 @@ class ClaimView(APIView):
 
             db.delete(claim)
             db.commit()
+
+            logger.info(
+                "Claim deleted",
+                claim_id=claim.id,
+                car_id=claim.car_id,
+                claim_amount=claim.amount,
+                claim_description=claim.description,
+                claim_date=str(claim.claim_date)
+            )
 
             return Response(status=204)
 

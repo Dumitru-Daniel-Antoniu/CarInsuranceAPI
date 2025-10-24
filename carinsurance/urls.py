@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from carinsurance_api.api.routers.health import HealthView
 from carinsurance_api.api.routers.owners import OwnerView
 
@@ -25,5 +27,7 @@ urlpatterns = [
     path("health/", HealthView.as_view()),
     path("owner/", OwnerView.as_view()),
     path("owner/<int:owner_id>/", OwnerView.as_view()),
-    path('api/cars/', include('carinsurance_api.api.urls'))
+    path('api/cars/', include('carinsurance_api.api.urls')),
+    path('openapi.json', SpectacularAPIView.as_view(), name='schema'),
+    path('docs', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
 ]

@@ -1,7 +1,7 @@
 """Initial migration
 
 Revision ID: d59bb5449cfa
-Revises: 
+Revises:
 Create Date: 2025-10-22 16:48:07.339999
 
 """

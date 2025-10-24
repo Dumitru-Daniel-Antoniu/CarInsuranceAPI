@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from carinsurance_api.api.errors import error_response
 from carinsurance_api.api.schemas import PolicySchema
+from carinsurance_api.core.core_logger import logger
 from carinsurance_api.db.models.car import Car
 from carinsurance_api.db.models.policy import Policy
 from carinsurance_api.db.session import SessionLocal
@@ -70,6 +71,15 @@ class PolicyView(APIView):
             policy = create_policy(db, policy_data)
             response_data = PolicySchema.model_validate(policy).model_dump(by_alias=True)
 
+            logger.info(
+                "Policy created",
+                policy_id=policy.id,
+                car_id=policy.car_id,
+                provider=policy.provider,
+                start_date=str(policy.start_date),
+                end_date=str(policy.end_date)
+            )
+
             return Response(response_data, status=201)
 
         finally:
@@ -91,6 +101,15 @@ class PolicyView(APIView):
 
             db.delete(policy)
             db.commit()
+
+            logger.info(
+                "Policy deleted",
+                policy_id=policy.id,
+                car_id=policy.car_id,
+                provider=policy.provider,
+                start_date=str(policy.start_date),
+                end_date=str(policy.end_date)
+            )
 
             return Response(status=204)
         finally:

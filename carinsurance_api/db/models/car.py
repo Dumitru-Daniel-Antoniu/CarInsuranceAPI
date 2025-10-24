@@ -12,8 +12,6 @@ from carinsurance_api.db.base import Base, PKInt
 # from carinsurance_api.db.models.policy import Policy
 
 
-
-
 class Car(Base):
     __tablename__ = "cars"
 
