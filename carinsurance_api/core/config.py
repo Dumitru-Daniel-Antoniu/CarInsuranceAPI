@@ -1,9 +1,13 @@
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
-    database_url: str
-    scheduler_enabled: bool = False
-    log_level: str = "INFO"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-    model_config = SettingsConfigDict(env_file=".env")
+class Settings(BaseSettings):
+    database_url: str = f"sqlite:///{(PROJECT_ROOT / 'carinsurance.db').as_posix()}"
+    scheduler_enabled: bool = True
+    job_interval_minutes: int = 10
+    server_tz: str = "Europe/Bucharest"
+
+    # model_config = SettingsConfigDict(env_file=".env")
