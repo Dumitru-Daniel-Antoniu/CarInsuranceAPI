@@ -20,4 +20,4 @@ class Policy(Base):
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
     logged_expiry_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     car_id: Mapped[int] = mapped_column(ForeignKey("cars.id"), nullable=False)
-    # car: Mapped["Car"] = relationship(back_populates="policies")
+    car: Mapped["Car"] = relationship(back_populates="policies")

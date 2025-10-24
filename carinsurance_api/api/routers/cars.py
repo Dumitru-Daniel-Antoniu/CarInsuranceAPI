@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from sqlalchemy.exc import IntegrityError
 
 from carinsurance_api.api.errors import error_response
 from carinsurance_api.api.schemas import CarSchema, OwnerSchema
@@ -25,7 +26,7 @@ class CarView(APIView):
                     return Response(error_response(404, "Car not found"), status=404)
 
                 owner = db.get(Owner, car.owner_id)
-                car_data = CarSchema.model_validate(car).model_dump(by_alias=True)
+                car_data = CarSchema.model_validate(car).model_dump(by_alias=True, exclude={"owner_id"})
                 owner_data = OwnerSchema.model_validate(owner).model_dump(by_alias=True)
                 car_data["owner"] = owner_data
 
@@ -37,7 +38,7 @@ class CarView(APIView):
 
                 for car in cars:
                     owner = db.get(Owner, car.owner_id)
-                    car_data = CarSchema.model_validate(car).model_dump(by_alias=True)
+                    car_data = CarSchema.model_validate(car).model_dump(by_alias=True, exclude={"owner_id"})
                     owner_data = OwnerSchema.model_validate(owner).model_dump(by_alias=True)
                     car_data["owner"] = owner_data
                     response_data.append(car_data)
@@ -64,12 +65,18 @@ class CarView(APIView):
             if not db.query(Owner).filter_by(id=car_data.owner_id).first():
                 return Response(error_response(404, "Owner does not exist"), status=404)
 
-            car = Car(**car_data.model_dump())
+            car = Car(**car_data.model_dump(exclude={"id"}))
             db.add(car)
-            db.commit()
-            db.refresh(car)
 
+            try:
+                db.commit()
+            except IntegrityError as ie:
+                db.rollback()
+                return Response(error_response(422, "Car vin must be unique", str(ie)), status=422)
+
+            db.refresh(car)
             response_data = CarSchema.model_validate(car).model_dump(by_alias=True)
+
             return Response(response_data, status=201)
 
         finally:

@@ -23,12 +23,12 @@ class Car(Base):
     model: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     year_of_manufacture: Mapped[int] = mapped_column(Integer, nullable=False)
     owner_id: Mapped[int] = mapped_column(ForeignKey("owners.id"), nullable=False)
-    # owner: Mapped["Owner"] = relationship(back_populates="cars")
-    # policies: Mapped[List["Policy"]] = relationship(
-    #     back_populates="car",
-    #     cascade="all, delete-orphan"
-    # )
-    # claims: Mapped[List["Claim"]] = relationship(
-    #     back_populates="car",
-    #     cascade="all, delete-orphan"
-    # )
+    owner: Mapped["Owner"] = relationship(back_populates="cars")
+    policies: Mapped[List["Policy"]] = relationship(
+        back_populates="car",
+        cascade="all, delete-orphan"
+    )
+    claims: Mapped[List["Claim"]] = relationship(
+        back_populates="car",
+        cascade="all, delete-orphan"
+    )

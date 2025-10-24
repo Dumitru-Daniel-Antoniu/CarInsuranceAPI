@@ -12,7 +12,7 @@ def get_car_history(db: Session, car_id: int) -> list[dict]:
 
     for policy in policies:
         history.append({
-            "type": "policy",
+            "type": "POLICY",
             "policyId": policy.id,
             "startDate": policy.start_date.isoformat(),
             "endDate": policy.end_date.isoformat(),

@@ -12,4 +12,4 @@ def valid_car_and_policy(db: Session, car_id: int, target_date: date) -> bool:
     if not car:
         return False
     policy = get_active_policies_by_date(db, car_id, target_date)
-    return policy is not None
+    return len(policy) > 0

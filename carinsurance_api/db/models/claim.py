@@ -21,4 +21,4 @@ class Claim(Base):
     amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.now(timezone.utc), server_default=func.now(), nullable=False)
     car_id: Mapped[int] = mapped_column(ForeignKey("cars.id"), nullable=False)
-    # car: Mapped["Car"] = relationship(back_populates="claims")
+    car: Mapped["Car"] = relationship(back_populates="claims")

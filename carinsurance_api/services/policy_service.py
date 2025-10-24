@@ -8,7 +8,7 @@ from carinsurance_api.db.models.policy import Policy
 
 
 def create_policy(db: Session, policy_data: PolicySchema) -> Policy:
-    policy = Policy(**policy_data.model_dump())
+    policy = Policy(**policy_data.model_dump(exclude={"id"}))
     db.add(policy)
     db.commit()
     db.refresh(policy)

@@ -18,7 +18,7 @@ class Owner(Base):
     id: Mapped[PKInt]
     name: Mapped[str] = mapped_column(String(70), nullable=False)
     email: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, unique=True)
-    # cars: Mapped[List["Car"]] = relationship(
-    #     back_populates="owner",
-    #     cascade="all, delete-orphan"
-    # )
+    cars: Mapped[List["Car"]] = relationship(
+        back_populates="owner",
+        cascade="all, delete-orphan"
+    )

@@ -23,6 +23,7 @@ from carinsurance_api.api.routers.owners import OwnerView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("health/", HealthView.as_view()),
-    path("owner/{owner_id}/", OwnerView.as_view()),
+    path("owner/", OwnerView.as_view()),
+    path("owner/<int:owner_id>/", OwnerView.as_view()),
     path('api/cars/', include('carinsurance_api.api.urls'))
 ]

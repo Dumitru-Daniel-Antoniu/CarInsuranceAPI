@@ -9,10 +9,39 @@ from carinsurance_api.api.schemas import PolicySchema
 from carinsurance_api.db.models.car import Car
 from carinsurance_api.db.models.policy import Policy
 from carinsurance_api.db.session import SessionLocal
-from carinsurance_api.services.policy_service import create_policy
+from carinsurance_api.services.policy_service import create_policy, get_active_policies_by_date
+from carinsurance_api.services.validity_service import valid_car_and_policy
 
 
 class PolicyView(APIView):
+    def get(self, request, car_id, policy_id=None):
+        db = SessionLocal()
+
+        try:
+            if policy_id is not None:
+                policy = db.get(Policy, policy_id)
+
+                if not policy or policy.car_id != car_id:
+                    return Response(error_response(404, "Policy not found for this car"), status=404)
+
+                response_data = PolicySchema.model_validate(policy).model_dump(by_alias=True)
+
+                return Response(response_data, status=200)
+
+            else:
+                car = db.get(Car, car_id)
+
+                if not car:
+                    return Response(error_response(404, "Car not found"), status=404)
+
+                policies = db.query(Policy).filter_by(car_id=car_id).all()
+                response_data = [PolicySchema.model_validate(policy).model_dump(by_alias=True) for policy in policies]
+
+                return Response(response_data, status=200)
+
+        finally:
+            db.close()
+
 
     def post(self, request, car_id):
         db = SessionLocal()
@@ -24,16 +53,19 @@ class PolicyView(APIView):
             try:
                 policy_data = PolicySchema.model_validate(data)
             except ValidationError as ve:
-                return Response(error_response(422, "Policy validation error", ve.errors()), status=422)
-
-            if not data.get("endDate"):
-                return Response(error_response(400, "End date must be present"), status=400)
-            if policy_data.end_date < policy_data.start_date:
-                return Response(error_response(422, "End date must be after or equal to start date"), status=422)
+                if ve.errors()[0]['type'] == 'value_error':
+                    return Response(error_response(422, "Policy validation error", ve.errors()[0]['msg']), status=422)
+                else:
+                    return Response(error_response(422, "Policy validation error", ve.errors()), status=422)
 
             car = db.get(Car, policy_data.car_id)
             if not car:
                 return Response(error_response(404, "Car not found"), status=404)
+
+            active_policies_start_date = get_active_policies_by_date(db, car_id, policy_data.start_date)
+            active_policies_end_date = get_active_policies_by_date(db, car_id, policy_data.end_date)
+            if len(active_policies_start_date) > 0 or len(active_policies_end_date) > 0:
+                return Response(error_response(409, "There are policies that overlap"), status=409)
 
             policy = create_policy(db, policy_data)
             response_data = PolicySchema.model_validate(policy).model_dump(by_alias=True)
@@ -79,7 +111,7 @@ class InsuranceValidityView(APIView):
             try:
                 target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             except ValueError:
-                return Response(error_response(400, "Invalid date format, expected YYYY-MM-DD"), status=400)
+                return Response(error_response(400, "Invalid date format, expected YYYY-MM-DD with a valid date"), status=400)
 
             if not (1900 <= target_date.year <= 2100):
                 return Response(error_response(400, "Date year must be between 1900 and 2100"), status=400)
@@ -90,7 +122,7 @@ class InsuranceValidityView(APIView):
 
             valid = valid_car_and_policy(db, car_id, target_date)
             response_data = {
-                "carId": request.car_id,
+                "carId": car_id,
                 "date": date_str,
                 "valid": valid
             }
